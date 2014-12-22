@@ -2,14 +2,6 @@ class Solution {
 public:
 
     int threeSumClosest(vector<int> &num, int target) {
-        if(num.size()<=3){
-        	vector<int>::iterator iter=num.begin();
-        	int sum=0;
-        	for(;iter!=num.end();iter++){
-	        	sum+=*iter;
-	        }
-	        return sum;
-        }
         int closestSum=9999;
         sort(num.begin(),num.end());
         int len=num.size();
