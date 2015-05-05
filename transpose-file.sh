@@ -1,0 +1,1 @@
+cat file.txt | awk -F " " 'BEGIN{} {for(i=1;i<=NF;++i){COL[i][NR]=$i;}} END{for(m in COL){for(n in COL[m]){if(n=="1"){printf("%s",COL[m][1])}else{printf(" %s",COL[m][n])} } print ""} }'
