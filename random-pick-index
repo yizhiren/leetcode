@@ -1,0 +1,35 @@
+
+/*
+水塘抽样
+https://zh.wikipedia.org/wiki/%E6%B0%B4%E5%A1%98%E6%8A%BD%E6%A8%A3
+*/
+
+
+class Solution {
+public:
+    vector<int> num;
+    Solution(vector<int> nums) 
+        :num(std::move(nums))
+    {
+        
+    }
+    
+    int pick(int target) {
+        int cnt=0;
+        int got;
+        for(int i=0;i<num.size();i++){
+            if(num[i]!=target)continue;
+            cnt++;
+            if(rand()%cnt == 0){
+                got=i;
+            }
+        }
+        return got;
+    }
+};
+
+/**
+ * Your Solution object will be instantiated and called as such:
+ * Solution obj = new Solution(nums);
+ * int param_1 = obj.pick(target);
+ */
