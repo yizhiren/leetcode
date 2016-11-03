@@ -1,0 +1,24 @@
+typedef map<char,int> Mapping;
+
+class Solution {
+public:
+    bool canConstruct(string ransomNote, string magazine) {
+        Mapping r;
+        Mapping m;
+        for(auto ch:ransomNote){
+            r[ch] = r[ch] + 1;
+        }
+        for(auto ch:magazine){
+            m[ch] = m[ch] + 1;
+        }
+        
+        for(auto pr:r){
+            if(m[pr.first]<pr.second){
+                return false;
+            }
+        }
+        
+        return true;
+        
+    }
+};
