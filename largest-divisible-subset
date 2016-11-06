@@ -1,0 +1,76 @@
+var max_=function(a,b){
+    return a>b?a:b;
+}
+
+var calcDataOfNum = function(nums,index,result){
+    if(result[index] > 0)return result[index];
+    
+    var len = nums.length;
+    {
+        var maxcnt=1;
+        for(var j=index-1;j>=0;j--){
+            if(nums[index]%nums[j]===0){
+                maxcnt=max_(maxcnt,calcDataOfNum(nums,j,result)+1);
+            }else{
+                // nothing
+            }
+        }
+
+        result[index]=maxcnt;
+        result[len] = max_(result[len],result[index]);
+    }
+    return result[index];
+    
+}
+
+var pickList = function(nums,result){
+    var maxCnt = result[nums.length];
+    var answer = [];
+    
+    var walk= nums.length-1;
+    
+    var prenum=0;
+    while(maxCnt > 0)
+    {
+        if(result[walk] == maxCnt
+            && prenum%nums[walk] === 0 ){
+            answer.push(nums[walk]);
+            maxCnt--;
+            prenum = nums[walk];
+        }
+        walk--;
+    }
+    
+    return answer;
+}
+
+function sortNumber(a,b)
+{
+    return a - b;
+}
+
+/**
+ * @param {number[]} nums
+ * @return {number[]}
+ */
+var largestDivisibleSubset = function(nums) {
+    // sort
+    nums.sort(sortNumber);
+    
+    // dynamic programing, init table
+    var result = [];
+    for(var i=nums.length; i>=0; i--){
+        result[i] = 0;
+    }
+    
+    // calc the max count if max element is nums[i] in subset 
+    for(i=nums.length-1; i>=0; i--){
+        calcDataOfNum(nums,i,result);
+    }
+    
+    // pickout one subset that element count is the most(s)
+    var answerList = pickList(nums,result);
+
+    return answerList;
+    
+};
