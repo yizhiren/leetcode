@@ -1,0 +1,74 @@
+// keyword heap / priority_queue
+
+include <vector>
+#include <queue>
+#include <algorithm>
+#include <utility>
+
+using namespace std;
+
+typedef pair<int, int> Pair;
+
+ 
+
+ struct cmp{
+
+    bool operator() ( const Pair& a, const Pair& b ){
+
+        return (a.first+a.second)>(b.first+b.second);
+
+    }
+
+};
+
+
+
+typedef priority_queue<Pair, vector<Pair>, cmp> Q;
+
+
+
+
+
+class Solution {
+
+    Q que;
+
+public:
+    int _min(unsigned int a, unsigned int b){
+	return a>b?b:a;
+    }
+
+    vector<pair<int, int> > kSmallestPairs(vector<int>& nums1, vector<int>& nums2, int k) {
+
+        int len1=_min((unsigned int)k,nums1.size());
+
+        for(int i=0;i<len1;i++){
+
+            int len2 = _min((unsigned int)k,nums2.size());
+
+            for(int j=0;j<len2;j++){
+
+                que.push(Pair(nums1[i],nums2[j]));
+
+            }
+
+        }
+
+        
+
+        vector<Pair> result;
+        
+        for(int n=0;n<k;n++){
+            if(que.empty())break;
+            result.push_back(que.top());
+	        que.pop();
+
+        }
+
+        
+
+        return result;
+
+    }
+
+};
