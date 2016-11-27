@@ -1,0 +1,124 @@
+#include <vector>
+#include <algorithm>
+#include <assert.h>
+typedef std::vector<int> Vector;
+
+struct Layer{
+	Vector pair[2];
+	Layer* subLayer[2];
+
+	Layer(){
+		pair[0].clear();
+		pair[1].clear();
+		subLayer[0] = 0;
+		subLayer[1] = 0;
+	}
+	~Layer(){
+		pair[0].clear();
+		pair[1].clear();
+		delete subLayer[0];
+		delete subLayer[1];		
+	}	
+};
+
+#define BIT(n) (1 << (n))
+
+
+class Solution {
+private:
+	Layer highestLayer;
+	int highestXOR;
+public:	
+	Solution()
+		:highestXOR(0)
+	{}
+	void fillHighestLayer(Vector& nums, int bitoffset){
+		highestLayer.pair[0].clear();
+		highestLayer.pair[1].clear();
+		delete highestLayer.subLayer[0];highestLayer.subLayer[0]=0;
+		delete highestLayer.subLayer[1];highestLayer.subLayer[1]=0;
+		for(int num:nums){
+			int hasBit = (num & BIT(bitoffset))?1:0;
+			highestLayer.pair[hasBit].push_back(num);
+		}
+	}
+	
+	bool allSameBit(Layer &layer){
+		return (layer.subLayer[0]->pair[0].size() * layer.subLayer[0]->pair[1].size() == 0)
+			&& (layer.subLayer[1]->pair[0].size() * layer.subLayer[1]->pair[1].size() == 0);
+	}
+	
+	void skipToNextBit(Layer &layer, int bitoffset) {
+			delete layer.subLayer[0];layer.subLayer[0] = 0;
+			delete layer.subLayer[1];layer.subLayer[1] = 0;
+			fillSubLayer(layer,bitoffset-1);		
+	}
+	
+	void gotoNextBit(Layer &layer, int bitoffset){
+			fillSubLayer(*layer.subLayer[0],bitoffset-1);
+			fillSubLayer(*layer.subLayer[1],bitoffset-1);
+	}
+	
+	void updateHighestXOR(Layer &layer){
+		highestXOR = std::max(highestXOR, (layer.pair[0][0] ^ layer.pair[1][0]));
+	}
+	
+	void fillSubLayer(Layer &layer, int bitoffset){
+		if(layer.pair[0].size()==1 && layer.pair[1].size()==1){
+			return updateHighestXOR(layer);
+		}
+
+		if(bitoffset < 0 ){
+			if(layer.pair[0].size() <= 0 || layer.pair[1].size() <= 0){
+				return;
+			}else{
+				return updateHighestXOR(layer);					
+			}
+			
+		}
+		
+		
+		layer.subLayer[0]=new Layer();
+		layer.subLayer[1]=new Layer();
+		for(int val:layer.pair[0]){
+			int hasBit = (val & BIT(bitoffset))?1:0;
+			layer.subLayer[hasBit]->pair[0].push_back(val);
+		}
+		for(int val:layer.pair[1]){
+			int hasBit = (val & BIT(bitoffset))?1:0;
+			layer.subLayer[1-hasBit]->pair[1].push_back(val);
+		}
+		
+		if(allSameBit(layer))
+		{
+			skipToNextBit(layer, bitoffset);
+		}else{
+			gotoNextBit(layer, bitoffset);
+		}
+	
+	}
+	
+	int findHighestBit(Vector& nums){
+		for(int i=30;i>=0;i--){
+			int and_ = BIT(i);
+			int or_ = 0;
+			for(int num:nums){
+				and_ &= (num & BIT(i));
+				or_  |= (num & BIT(i));
+			}
+			if((and_ ==0) && (or_ != 0)){
+				return i;
+			}
+		}
+		
+		return 0;
+	}
+	
+    int findMaximumXOR(Vector& nums) {
+    	highestXOR = 0;
+    	int highestBit = findHighestBit(nums);
+ 		fillHighestLayer(nums,highestBit);
+        fillSubLayer(highestLayer,highestBit-1);
+        return highestXOR;
+    }
+};
