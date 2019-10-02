@@ -6,6 +6,7 @@
  *     ListNode(int x) : val(x), next(NULL) {}
  * };
  */
+
 class Solution {
 public:
     int getListLen(ListNode* head){
@@ -45,6 +46,22 @@ public:
         head->next = NULL;
     }
     
+    void revertList2(ListNode* head) {
+        ListNode* p0 = head;
+        ListNode* p1 = head->next;
+        ListNode* p2 = p1?p1->next:NULL;
+        
+
+        while(p1){
+            p1 -> next = p0;
+            p0 = p1;
+            p1 = p2;
+            p2 = p1?p1->next:NULL;
+        }
+
+        head -> next = NULL;
+    }
+    
     bool cmpTwoList(ListNode* part1, ListNode* part2) {
         while(part1 && part2) {
             if(part1->val != part2->val){
@@ -64,9 +81,8 @@ public:
         ListNode* part1Head = getPart1Head(head,len);
         ListNode* part2Head = getPart2Head(head,len);
         part1Head -> next = NULL;
-        revertList(head);
+        //revertList(head);
+        revertList2(head);
         return cmpTwoList(part1Head,part2Head);
     }
 };
-
-
