@@ -133,3 +133,37 @@ public:
         return ss.str();
     }
 };
+
+//////////////////////
+//这是用split解的，效率低些，代码简洁很多
+
+vector<string> s_split(const string& in, const string& delim){
+    regex re{delim};
+    return vector<string>{
+        sregex_token_iterator(in.begin(),in.end(),re,-1),
+        sregex_token_iterator()
+    };
+}
+
+
+class Solution {
+public:
+    string simplifyPath(string path) {
+        vector<string> segs = s_split(path,"/");
+        vector<string> segs_new;
+        
+        for(auto &seg: segs){
+            if(seg=="."){continue;}
+            else if(seg==""){continue;}
+            else if(seg==".."){if(!segs_new.empty()){segs_new.pop_back();}}
+            else{segs_new.push_back(seg);}
+        }
+        if(segs_new.empty()){return "/";}
+        
+        stringstream ss;
+        for(auto &seg: segs_new){
+            ss << "/" << seg;
+        }
+        return ss.str();
+    }
+};
