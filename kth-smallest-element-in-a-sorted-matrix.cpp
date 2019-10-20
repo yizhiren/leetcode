@@ -18,3 +18,25 @@ public:
         return res;
     }
 };
+
+
+
+////
+class Solution {
+public:
+    int kthSmallest(vector<vector<int>>& matrix, int k) {
+        if(matrix.empty())return 0;
+        
+        int n = matrix.size();
+        vector<int> vec;
+        
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+                vec.push_back(matrix[i][j]);
+            }
+        }
+        nth_element(vec.begin(),vec.begin()+k-1, vec.end());
+        return vec[k-1];
+
+    }
+};
