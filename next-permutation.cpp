@@ -37,3 +37,40 @@ public:
         
     }
 };
+
+
+////////////////////
+class Solution {
+public:
+    void nextPermutation(vector<int>& nums) {
+        if(nums.empty()){
+            return;
+        }
+        
+        int idx = nums.size()-1;
+        while(idx > 0){
+            if(nums[idx]<=nums[idx-1]){
+                idx--;
+            }else{
+                break;
+            }
+        }
+        
+        if(idx==0){
+            sort(nums.begin(),nums.end());
+        }else{
+            int i=nums.size()-1;
+            for(;i>=idx;i--){
+                if(nums[i]>nums[idx-1]){
+                    break;
+                }
+            }
+            swap(nums[idx-1],nums[i]);
+            auto iter = nums.begin();
+            advance(iter,idx);
+            sort(iter,nums.end());
+        }
+        
+        return;
+    }
+};
