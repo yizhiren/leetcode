@@ -55,3 +55,53 @@ public:
 
     }
 };
+
+///////////////////////
+
+
+// 参考的 https://leetcode.com/problems/divide-two-integers/discuss/448070/C%2B%2B-kinda-shorter-solution(-not-using-long-datatype-)-beats-100
+class Solution {
+public:
+    int getQuotient(int dividend, int divisor){
+        int quotient = 0;
+        while(dividend >= divisor){
+            int multiplier = 1;
+            int preDivisor=0;
+            int currDivisor = divisor;
+            while(currDivisor < (INT_MAX>>1) && dividend > currDivisor){
+                preDivisor = currDivisor;
+                currDivisor <<= 1;
+                multiplier <<= 1;
+            }
+            if (multiplier > 1){
+                quotient += (multiplier >> 1);
+            }else{
+                quotient += multiplier;
+                break;
+            }
+            dividend -= preDivisor;
+        }
+        
+        return quotient;
+    }
+    int divide(int dividend, int divisor) {
+        int quotient = 0;
+        if(divisor == 0) return INT_MAX;
+        if(divisor == 1)return dividend;
+        if(divisor==-1)return(dividend==INT_MIN)?INT_MAX:-dividend;
+        if(dividend==divisor)return 1;
+        if(divisor==INT_MIN)return 0;
+        
+        if(dividend==INT_MIN){
+            if(divisor>0)dividend+=divisor;
+            else dividend-=divisor;
+            quotient++;
+        }
+        bool sign = (dividend<0) ^ (divisor < 0);
+        if(dividend < 0)dividend=-dividend;
+        if(divisor<0)divisor=-divisor;
+        quotient += getQuotient(dividend,divisor);
+        
+        return sign ? -quotient:quotient;
+    }
+};
