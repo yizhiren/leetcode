@@ -1,3 +1,46 @@
+
+
+
+
+
+/**
+ * 递归检查该节点是否是LCA，代码更加清晰
+   关键判断条件是：
+        bool thisIsLca = (isThisIsPQ && (isLeftContainPQ || isRightContainPQ)) || (!isThisIsPQ && isLeftContainPQ && isRightContainPQ);
+        if (thisIsLca) {
+            lca = root;
+        }
+ */
+class Solution {
+public:
+    TreeNode* lca;
+    bool findpq(TreeNode* root, TreeNode* p, TreeNode* q) {
+        if (nullptr==root){
+            return false;
+        }
+        bool isLeftContainPQ = findpq(root->left,p,q);
+        bool isRightContainPQ = findpq(root->right,p,q);
+        bool isThisIsPQ = ((root==p) || (root==q));
+        
+        bool thisIsLca = (isThisIsPQ && (isLeftContainPQ || isRightContainPQ)) || (!isThisIsPQ && isLeftContainPQ && isRightContainPQ);
+        if (thisIsLca) {
+            lca = root;
+        }
+        
+        return isLeftContainPQ || isRightContainPQ || isThisIsPQ;
+    }
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        findpq(root,p,q);
+        return lca;
+    }
+};
+
+
+
+
+///////////////////////////////////
+// 找到p和q的完整路径，再从底层路径开始遍历查找
+///////////////////////////////////
 struct MatchNodePredicate
 
 {
