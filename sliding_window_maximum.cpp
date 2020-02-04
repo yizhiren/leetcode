@@ -103,3 +103,60 @@ public:
     }
 
 };
+
+
+///////////////
+
+class Window {
+public:
+    Window(vector<int>& _nums, int _k)
+        :maxVal(INT_MIN)
+        ,maxIndex(-1)
+        ,nums(_nums)
+        ,k(_k){}
+    int maxVal;
+    int maxIndex;
+    vector<int>& nums;
+    int k;
+    
+    void Rebuild(int startIndex) {
+        maxVal=INT_MIN;
+        maxIndex=-1;
+        for(int i=startIndex;i<startIndex+k;i++){
+            Push(nums[i],i);
+        }
+    }
+    void Push(int val, int index){
+        if(val > maxVal){
+            maxVal = val;
+            maxIndex = index;
+        }
+        if(index-k>=maxIndex){
+            Rebuild(index-k+1);
+        }
+    }
+    int GetMax() {
+        return maxVal;
+    }
+};
+
+class Solution {
+public:
+    vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+        if(nums.size() <= 0){
+            return vector<int>();
+        }
+        
+        Window window(nums,k);
+        window.Rebuild(0);
+        vector<int> res;
+        res.push_back(window.GetMax());
+        for(int i=k;i<nums.size();i++){
+            window.Push(nums[i],i);
+            res.push_back(window.GetMax());
+        }
+        
+        return res;
+    }
+};
+
