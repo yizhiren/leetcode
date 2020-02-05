@@ -14,20 +14,17 @@ public:
             return nums[0];
         }
         int len = nums.size();
-        vector<int> mins(len);
-        vector<int> maxs(len);
+
         int maxAll = nums[0];
-        mins[0] = nums[0];
-        maxs[0] = nums[0];
+        int minDy = nums[0];
+        int maxDy = nums[0];
         for(int i=1;i<len;i++){
             int a = nums[i];
-            int b = a*mins[i-1];
-            int c = a*maxs[i-1];
-            maxs[i] = maxOfThree(a,b,c);
-            mins[i] = minOfThree(a,b,c);
-            if(maxs[i] > maxAll){
-                maxAll = maxs[i];
-            }
+            int b = a*minDy;
+            int c = a*maxDy;
+            maxDy = maxOfThree(a,b,c);
+            minDy = minOfThree(a,b,c);
+            maxAll = max(maxAll,maxDy);
         }
         return maxAll;
         
