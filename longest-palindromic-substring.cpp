@@ -26,3 +26,46 @@ public:
         return s.substr(startpos,maxlen);
     }
 };
+
+
+//////////////////////
+
+class Solution {
+public:
+    string longestPalindrome(string s) {
+        int len=s.length();  
+        int maxlen=0;int startpos=0;
+        for(int i=0;i<len;i++){
+            int j=0;
+            while(i-j>=0 && i+j<len){
+                if(s[i-j]==s[i+j]){
+                   j++;
+                }else{
+                    break;
+                }
+            }
+            j--;
+            if(1+2*j > maxlen){
+                maxlen = 1+2*j;
+                startpos = i-j;
+            }
+        }
+        for(int i=0;i<len;i++){
+            int j=0;
+            while(i-j>=0 && i+1+j<len){
+                if(s[i-j]==s[i+1+j]){
+                   j++;
+                }else{
+                    break;
+                }
+            }
+            if(2*j > maxlen){
+                maxlen = 2*j;
+                startpos = i-j+1;
+            }
+        }
+        return s.substr(startpos,maxlen);
+    }
+
+}
+
