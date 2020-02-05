@@ -7,7 +7,7 @@ class Solution {
     vector<vector<int>> nodeList;
     vector<int> res;
 	bool checkPrerequire(int idx){
-        if(visited.find(idx) != visited.end()){
+        if(visited[idx]){
             return true;
         }
         if(visiting[idx]){
