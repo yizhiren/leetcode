@@ -1,3 +1,4 @@
+// 这个能拿到顺序
 class Solution {
 public:
     
@@ -54,3 +55,33 @@ public:
         
     }
 };
+
+// https://leetcode.com/problems/task-scheduler/solution/
+// 这个不关注顺序，只要能填满(maxValue-1)*n的idle格子就肯定能排出顺序，所以只要计算idle格子能不能填满
+class Solution {
+public:
+    
+    int leastInterval(vector<char>& tasks, int n) {
+        if(tasks.empty()){
+            return 0;
+        }
+        
+        map<char, int> count;
+        for(auto ch:tasks){
+            count[ch]++;
+        }
+        vector<pair<char,int>> taskvec(count.begin(),count.end());
+        sort(taskvec.begin(),taskvec.end(),[](const pair<char,int>& a, const pair<char,int>& b){
+            return a.second > b.second;
+        });        
+        
+        int maxIdle = (taskvec[0].second-1) * n;
+        for(int i=1;i<taskvec.size();i++){
+            maxIdle -= min(taskvec[i].second,taskvec[0].second-1); // 大于taskvec[0].second-1的部分不能用来填格子
+        }
+        
+        return maxIdle<0?tasks.size():tasks.size()+maxIdle;
+        
+    }
+};
+
